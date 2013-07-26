@@ -20,6 +20,8 @@
 <div class="account-container">
 	
 	<div class="content clearfix">
+
+		<center><img src="<?php echo base_url().'asset/theme/'.$GLOBALS['site_theme']; ?>/images/logo.png" width="200"></center>
 		
 		<?php echo form_open("login/act"); ?>
 		

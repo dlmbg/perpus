@@ -55,8 +55,16 @@
 				<li>
 					<a href="<?php echo base_url(); ?>petugas/anggota"><span class="icon-edit"></span>Anggota</a>
 				</li>
-				<li>
-					<a href="<?php echo base_url(); ?>petugas/laporan"><span class="icon-fire"></span>Laporan</a>
+				<li class="lp-dropdown">
+					<a href="#" class="lp-dropdown-toggle" id="laporan"><span class="icon-fire"></span>Laporan</a>
+					<ul class="lp-dropdown-menu simple" data-dropdown-owner="laporan">
+						<li>
+							<a href="<?php echo base_url(); ?>petugas/laporan_pengembalian"><i class="icon-th"></i>&nbsp;&nbsp;Laporan Pengembalian</a>
+						</li>
+						<li>
+							<a href="<?php echo base_url(); ?>petugas/laporan_peminjaman"><i class="icon-signin"></i>&nbsp;&nbsp;Laporan Peminjaman</a>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</div>

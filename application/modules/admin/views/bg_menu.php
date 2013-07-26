@@ -66,8 +66,16 @@
 				<li>
 					<a href="<?php echo base_url(); ?>admin/download_ebook"><span class="icon-table"></span>Download E-Book</a>
 				</li>
-				<li>
-					<a href="<?php echo base_url(); ?>admin/laporan"><span class="icon-fire"></span>Laporan</a>
+				<li class="lp-dropdown">
+					<a href="#" class="lp-dropdown-toggle" id="laporan"><span class="icon-fire"></span>Laporan</a>
+					<ul class="lp-dropdown-menu simple" data-dropdown-owner="laporan">
+						<li>
+							<a href="<?php echo base_url(); ?>admin/laporan_pengembalian"><i class="icon-th"></i>&nbsp;&nbsp;Laporan Pengembalian</a>
+						</li>
+						<li>
+							<a href="<?php echo base_url(); ?>admin/laporan_peminjaman"><i class="icon-signin"></i>&nbsp;&nbsp;Laporan Peminjaman</a>
+						</li>
+					</ul>
 				</li>
 				<li>
 					<a href="<?php echo base_url(); ?>admin/user"><span class="icon-cog"></span>Data User</a>

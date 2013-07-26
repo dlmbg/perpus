@@ -21,6 +21,8 @@
 	
 	<div class="content clearfix">
 
+		<center><img src="<?php echo base_url().'asset/theme/'.$GLOBALS['site_theme']; ?>/images/logo.png" width="200"></center>
+
 		
 			<h1><?php echo $GLOBALS['site_title']; ?></h1>		
 				

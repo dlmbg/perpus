@@ -345,6 +345,7 @@ class app_global_admin_model extends CI_Model {
 					<td>".$h->judul."</td>
 					<td>".$h->pengarang."</td>
 					<td>".$h->jumlah_hal."</td>
+					<td>".$h->nama."</td>
 					<td>".$h->tanggal_download."</td></tr>";
 			$i++;
 		}
@@ -392,6 +393,108 @@ class app_global_admin_model extends CI_Model {
 					<td>";
 			$hasil .= "<a href='".base_url()."admin/ebook/edit/".$h->id_ebook."' class='btn btn-small btn-inverse'><i class='icon-edit'></i> Edit</a> ";
 			$hasil .= "<a href='".base_url()."admin/ebook/hapus/".$h->id_ebook."' onClick=\"return confirm('Are you sure?');\" class='btn btn-small btn-danger'><i class='icon-trash'></i> Hapus</a></td>
+					</tr>";
+			$i++;
+		}
+		$hasil .= '</table>';
+		$hasil .= '<div class="cleaner_h20"></div>';
+		$hasil .= $this->pagination->create_links();
+		return $hasil;
+	}
+	 
+	public function generate_index_laporan_peminjaman($limit,$offset,$filter=array())
+	{
+		$hasil="";
+		$where['tanggal_peminjaman'] = $this->session->userdata("cari");
+		$where2['tanggal_pengembalian'] = $this->session->userdata("cari");
+		$tot_hal = $this->db->like($where)->or_like($where2)->get("tbl_peminjaman");
+
+		$config['base_url'] = base_url() . 'admin/laporan_peminjaman/index/';
+		$config['total_rows'] = $tot_hal->num_rows();
+		$config['per_page'] = $limit;
+		$config['uri_segment'] = 4;
+		$config['first_link'] = 'First';
+		$config['last_link'] = 'Last';
+		$config['next_link'] = 'Next';
+		$config['prev_link'] = 'Prev';
+		$this->pagination->initialize($config);
+
+		$w = $this->db->like($where)->select("*")->or_like($where2)->join("tbl_buku","tbl_buku.kode_buku=tbl_peminjaman.id_buku")->join("tbl_anggota","tbl_anggota.id_anggota=tbl_peminjaman.id_anggota")->get("tbl_peminjaman",$limit,$offset);
+		
+		$hasil .= "<table class='table table-striped table-condensed'>
+					<thead>
+					<tr>
+					<th>No.</th>
+					<th>Judul</th>
+					<th>Pengarang</th>
+					<th>Nama Anggota</th>
+					<th>Tanggal Peminjaman</th>
+					<th>Tanggal Pengembalian</th>
+					</tr>
+					</thead>";
+		$i = $offset+1;
+		foreach($w->result() as $h)
+		{
+			$hasil .= "<tr>
+					<td>".$i."</td>
+					<td>".$h->judul."</td>
+					<td>".$h->pengarang."</td>
+					<td>".$h->nama."</td>
+					<td>".$h->tanggal_peminjaman."</td>
+					<td>".$h->tanggal_pengembalian."</td>
+					</tr>";
+			$i++;
+		}
+		$hasil .= '</table>';
+		$hasil .= '<div class="cleaner_h20"></div>';
+		$hasil .= $this->pagination->create_links();
+		return $hasil;
+	}
+	 
+	public function generate_index_laporan_pengembalian($limit,$offset,$filter=array())
+	{
+		$hasil="";
+		$tanggal = $this->session->userdata("cari");
+
+		$tot_hal = $this->db->query("select * from tbl_pengembalian a left join (SELECT pengarang,nama,tanggal_peminjaman,tanggal_pengembalian, id_peminjaman, judul FROM (`tbl_peminjaman`) JOIN `tbl_buku` ON `tbl_buku`.`kode_buku`=`tbl_peminjaman`.`id_buku` JOIN `tbl_anggota` ON `tbl_anggota`.`id_anggota`=`tbl_peminjaman`.`id_anggota`) b on a.id_peminjaman=b.id_peminjaman where tanggal_dikembalikan like '%".$tanggal."%' or tanggal_pengembalian like '%".$tanggal."%' or tanggal_peminjaman like '%".$tanggal."%'");
+
+		$config['base_url'] = base_url() . 'admin/pengembalian/index/';
+		$config['total_rows'] = $tot_hal->num_rows();
+		$config['per_page'] = $limit;
+		$config['uri_segment'] = 4;
+		$config['first_link'] = 'First';
+		$config['last_link'] = 'Last';
+		$config['next_link'] = 'Next';
+		$config['prev_link'] = 'Prev';
+		$this->pagination->initialize($config);
+
+		$w = $this->db->query("select * from tbl_pengembalian a left join (SELECT pengarang,nama,tanggal_peminjaman,tanggal_pengembalian, id_peminjaman, judul FROM (`tbl_peminjaman`) JOIN `tbl_buku` ON `tbl_buku`.`kode_buku`=`tbl_peminjaman`.`id_buku` JOIN `tbl_anggota` ON `tbl_anggota`.`id_anggota`=`tbl_peminjaman`.`id_anggota`) b on a.id_peminjaman=b.id_peminjaman where tanggal_dikembalikan like '%".$tanggal."%' or tanggal_pengembalian like '%".$tanggal."%' or tanggal_peminjaman like '%".$tanggal."%'   limit ".$offset.",".$limit." ");
+		
+		$hasil .= "<table class='table table-striped table-condensed'>
+					<thead>
+					<tr>
+					<th>No.</th>
+					<th>Judul</th>
+					<th>Pengarang</th>
+					<th>Nama Anggota</th>
+					<th>Tanggal Peminjaman</th>
+					<th>Tanggal Pengembalian</th>
+					<th>Tanggal Dikembalikan</th>
+					<th>Denda</th>
+					</tr>
+					</thead>";
+		$i = $offset+1;
+		foreach($w->result() as $h)
+		{
+			$hasil .= "<tr>
+					<td>".$i."</td>
+					<td>".$h->judul."</td>
+					<td>".$h->pengarang."</td>
+					<td>".$h->nama."</td>
+					<td>".$h->tanggal_peminjaman."</td>
+					<td>".$h->tanggal_pengembalian."</td>
+					<td>".$h->tanggal_dikembalikan."</td>
+					<td>".$h->denda."</td>
 					</tr>";
 			$i++;
 		}

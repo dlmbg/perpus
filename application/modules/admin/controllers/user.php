@@ -51,10 +51,10 @@ class user extends CI_Controller {
    {
 		if($this->session->userdata("logged_in")!=""  && $this->session->userdata("level")=="admin")
 		{
-			$where['kode_user'] = $id_param;
+			$where['id_user'] = $id_param;
 			$get = $this->db->get_where("tbl_user",$where)->row();
 			
-			$d['level'] = $get->level;
+			$d['hak_akses'] = $get->hak_akses;
 			$d['username'] = $get->username;
 			$d['nama'] = $get->nama;
 			
